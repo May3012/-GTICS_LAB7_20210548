@@ -44,7 +44,6 @@ public class controller {
     }
 
     // Para agregar un usuario
-    //Para agregar un usuario
     @PostMapping("")
     public ResponseEntity<HashMap<String, Object>> addUser(
             @RequestBody User usuario,
@@ -126,6 +125,42 @@ public class controller {
             return ResponseEntity.badRequest().body(responseMap);
         }
     }
+    /*@PutMapping(value = "")
+    public ResponseEntity<HashMap<String, Object>> actualizarPlayer(@RequestBody User user) {
+        HashMap<String, Object> responseMap = new HashMap<>();
 
+        if (user.getId() != null && user.getId() > 0) {
+            Optional<User> opt = userRepository.findById(user.getId());
+            if (opt.isPresent()) {
+                User playerFromDb = opt.get();
+
+                // Actualizar solo los campos no nulos
+
+                userRepository.save(playerFromDb);
+                responseMap.put("estado", "actualizado");
+                return ResponseEntity.ok(responseMap);
+            } else {
+                responseMap.put("estado", "error");
+                responseMap.put("msg", "El jugador a actualizar no existe");
+                return ResponseEntity.badRequest().body(responseMap);
+            }
+        } else {
+            responseMap.put("estado", "error");
+            responseMap.put("msg", "Debe enviar un ID válido");
+            return ResponseEntity.badRequest().body(responseMap);
+        }
+    }
+
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<HashMap<String,String>> gestionExcepcion(HttpServletRequest request) {
+
+        HashMap<String, String> responseMap = new HashMap<>();
+        if (request.getMethod().equals("POST") || request.getMethod().equals("PUT")) {
+            responseMap.put("estado", "error");
+            responseMap.put("msg", "Debe enviar un producto");
+        }
+        return ResponseEntity.badRequest().body(responseMap);
+    }*/
 
 }
