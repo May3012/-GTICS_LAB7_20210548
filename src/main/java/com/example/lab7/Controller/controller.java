@@ -125,23 +125,49 @@ public class controller {
             return ResponseEntity.badRequest().body(responseMap);
         }
     }
-    /*@PutMapping(value = "")
-    public ResponseEntity<HashMap<String, Object>> actualizarPlayer(@RequestBody User user) {
+    @PutMapping(value = "")
+    public ResponseEntity<HashMap<String, Object>> actualizarrr(@RequestBody User user) {
         HashMap<String, Object> responseMap = new HashMap<>();
-
         if (user.getId() != null && user.getId() > 0) {
-            Optional<User> opt = userRepository.findById(user.getId());
-            if (opt.isPresent()) {
-                User playerFromDb = opt.get();
+            Optional<User> optionalUser = userRepository.findById(user.getId());
+            if (optionalUser.isPresent()) {
+                User userFromDB = optionalUser.get();
+                if (user.getType() != null) {
+                    if (user.getType().equals("contador") || user.getType().equals("cliente") || user.getType().equals("analista de promociones") || user.getType().equals("analista logistico")) {
+                        userFromDB.setType(user.getType());
+                        Integer authorizedResource = null;
 
-                // Actualizar solo los campos no nulos
+                        if (user.getType().equals("contador")) {
+                            authorizedResource = 5;
+                        } else if (user.getType().equals("cliente")) {
+                            authorizedResource = 6;
+                        } else if (user.getType().equals("analista de promociones")) {
+                            authorizedResource = 7;
+                        } else {
+                            authorizedResource = 8;
+                        }
+                        Optional<Resource> resourceOptional = resourceRepository.findById(authorizedResource);
+                        if (resourceOptional.isPresent()) {
+                            userFromDB.setAuthorizedResource(resourceOptional.get());
+                        } else {
+                            responseMap.put("estado", "error");
+                            responseMap.put("msg", "Coloque un tipo de usuario válido");
+                            return ResponseEntity.badRequest().body(responseMap);
+                        }
+                    }
+                } else {
+                    responseMap.put("estado", "error");
+                    responseMap.put("msg", "Debe enviar un tipo de usuario");
+                    return ResponseEntity.badRequest().body(responseMap);
+                }
 
-                userRepository.save(playerFromDb);
+                userRepository.save(userFromDB);
                 responseMap.put("estado", "actualizado");
+                responseMap.put("usuario", userFromDB);
                 return ResponseEntity.ok(responseMap);
             } else {
                 responseMap.put("estado", "error");
-                responseMap.put("msg", "El jugador a actualizar no existe");
+                responseMap.put("msg", "El usuario a actualizar no existe");
                 return ResponseEntity.badRequest().body(responseMap);
             }
         } else {
@@ -153,14 +179,14 @@ public class controller {
 
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<HashMap<String,String>> gestionExcepcion(HttpServletRequest request) {
-
+    public ResponseEntity<HashMap<String, String>> gestionExcepcion(HttpServletRequest request) {
         HashMap<String, String> responseMap = new HashMap<>();
         if (request.getMethod().equals("POST") || request.getMethod().equals("PUT")) {
             responseMap.put("estado", "error");
-            responseMap.put("msg", "Debe enviar un producto");
+            responseMap.put("mensaje", "Debe enviar un producto");
         }
         return ResponseEntity.badRequest().body(responseMap);
-    }*/
+    }
+
 
 }
