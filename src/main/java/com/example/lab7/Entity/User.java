@@ -20,7 +20,7 @@ public class User {
     @Column(name = "type", length = 100)
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "authorizedResource")
     private Resource authorizedResource;
 
